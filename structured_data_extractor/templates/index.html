@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResumeIQ — Structured Data Extractor</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/app.css" />
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     TOP NAV  (always visible, no hamburger, no dropdown)
+     ══════════════════════════════════════════════════════════════════════════ -->
+<nav class="topnav" id="topnav">
+  <div class="topnav-inner">
+    <a href="/" class="nav-logo" id="navLogo">
+      <span class="logo-mark">✦</span>
+      <span class="logo-text">ResumeIQ</span>
+    </a>
+
+    <!-- Landing nav links (hidden when in results) -->
+    <div class="topnav-links" id="landingLinks">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How it works</a>
+      <a href="#uploader" class="btn-nav">Try it free →</a>
+    </div>
+
+    <!-- Results nav (hidden on landing) -->
+    <div class="results-nav" id="resultsNav" hidden>
+      <button class="rnav-btn" data-page="overview">Overview</button>
+      <button class="rnav-btn" data-page="skills">Skills</button>
+      <button class="rnav-btn" data-page="experience">Experience</button>
+      <button class="rnav-btn" data-page="education">Education</button>
+      <button class="rnav-btn" data-page="ats">ATS Check</button>
+      <button class="rnav-btn" data-page="compare">Compare</button>
+    </div>
+
+    <!-- New resume button (only in results mode) -->
+    <button class="btn-new-resume" id="btnNewResume" hidden>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      New resume
+    </button>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     PAGE: LANDING  (hero + features + upload + how it works)
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div id="pageLanding">
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">Privacy-first · No data stored · Instant results</div>
+      <h1>Turn resumes into<br/><span class="gradient-text">structured data</span></h1>
+      <p class="hero-sub">
+        Upload a PDF, DOCX or TXT resume and get back a clean, validated candidate profile
+        — with quality score, skill breakdown and side-by-side comparison.
+      </p>
+      <div class="hero-cta">
+        <a href="#uploader" class="btn-hero-primary">Extract a resume →</a>
+        <a href="#how-it-works" class="btn-hero-ghost">See how it works</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-n">3</span><span class="stat-l">file formats</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-n">100+</span><span class="stat-l">skills detected</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-n">&lt;1s</span><span class="stat-l">extraction time</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-n">0</span><span class="stat-l">data retained</span></div>
+      </div>
+    </div>
+    <div class="hero-glow"></div>
+  </header>
+
+  <!-- Features -->
+  <section class="features-strip" id="features">
+    <div class="features-inner">
+      <div class="feat"><div class="feat-icon">🎯</div><div><strong>Resume Score</strong><p>Completeness &amp; quality rating on a 100-point scale.</p></div></div>
+      <div class="feat"><div class="feat-icon">📊</div><div><strong>Skill Breakdown</strong><p>Skills grouped by category with visual bar charts.</p></div></div>
+      <div class="feat"><div class="feat-icon">⚖️</div><div><strong>Compare Resumes</strong><p>Extract two resumes and compare them side by side.</p></div></div>
+      <div class="feat"><div class="feat-icon">🖨️</div><div><strong>Print / Export</strong><p>Export a clean printable report from the browser.</p></div></div>
+    </div>
+  </section>
+
+  <!-- Upload -->
+  <section class="upload-section" id="uploader">
+    <div class="upload-inner">
+      <div class="card upload-card">
+        <div class="card-header">
+          <h2>Extract candidate data</h2>
+          <p class="card-sub">Drop a resume below or use our built-in demo profile.</p>
+        </div>
+
+        <div class="drop-zone" id="dropZone">
+          <div class="drop-icon">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="17 8 12 3 7 8"/>
+              <line x1="12" y1="3" x2="12" y2="15"/>
+            </svg>
+          </div>
+          <p class="drop-title">Drag &amp; drop your resume here</p>
+          <p class="drop-hint">PDF, DOCX or TXT · max 5 MB</p>
+          <label class="btn-outline" for="fileInput">Browse file</label>
+          <input type="file" id="fileInput" accept=".pdf,.docx,.txt" hidden />
+        </div>
+
+        <div class="file-chosen" id="fileChosen" hidden>
+          <div class="file-info">
+            <div class="file-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+            </div>
+            <div>
+              <div class="file-name" id="fileName"></div>
+              <div class="file-size" id="fileSize"></div>
+            </div>
+          </div>
+          <button class="file-remove" id="fileRemove" aria-label="Remove file">✕</button>
+        </div>
+
+        <div class="action-row">
+          <button class="btn-primary" id="btnExtract">
+            <span class="btn-label">Extract structured data</span>
+            <span class="btn-spinner" hidden>
+              <svg class="spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+              </svg>
+            </span>
+          </button>
+          <button class="btn-ghost" id="btnSample">Try demo resume</button>
+        </div>
+
+        <div class="error-box" id="errorBox" hidden>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12" y2="16.5"/>
+          </svg>
+          <span id="errorMsg"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section class="how-section" id="how-it-works">
+    <div class="how-inner">
+      <div class="section-eyebrow">Under the hood</div>
+      <h2 class="section-title">How it works</h2>
+      <div class="steps-grid">
+        <div class="step"><div class="step-num">01</div><h3>Parse</h3><p>Your file is read server-side using pdfplumber, python-docx or plain UTF-8. Raw text is extracted preserving layout cues.</p></div>
+        <div class="step"><div class="step-num">02</div><h3>Extract</h3><p>Section headings are detected via a 50+ alias dictionary. Contact details, skills, experience and education are parsed with heuristics.</p></div>
+        <div class="step"><div class="step-num">03</div><h3>Score &amp; Validate</h3><p>A completeness score is computed across 6 weighted dimensions and validated against a Pydantic v2 schema.</p></div>
+        <div class="step"><div class="step-num">04</div><h3>Deliver</h3><p>Browse results page-by-page, download JSON, print a report or compare two candidates. No files are ever stored.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo"><span class="logo-mark">✦</span> ResumeIQ</div>
+      <p class="footer-copy">Structured extraction · Review all data before making hiring decisions · No files stored.</p>
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="/api/health">Status</a>
+      </div>
+    </div>
+  </footer>
+
+</div><!-- /pageLanding -->
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     RESULTS PAGES  (one div per section, full viewport each)
+     ══════════════════════════════════════════════════════════════════════════ -->
+<div id="pageResults" hidden>
+
+  <!-- ── Overview ────────────────────────────────────────────────────────── -->
+  <div class="full-page" id="rpage-overview" hidden>
+    <div class="full-page-inner">
+      <div class="page-header-row">
+        <div>
+          <h1 class="page-h1" id="ovHeadName">—</h1>
+          <p class="page-h1-sub" id="ovHeadSub">—</p>
+        </div>
+        <!-- Score badge -->
+        <div class="score-badge-lg">
+          <svg class="score-ring" viewBox="0 0 100 100">
+            <circle class="ring-bg"   cx="50" cy="50" r="42"/>
+            <circle class="ring-fill" cx="50" cy="50" r="42" id="ringFill"/>
+          </svg>
+          <div class="score-center-abs">
+            <div class="score-num" id="scoreNum">—</div>
+            <div class="score-lbl">Score</div>
+          </div>
+          <div class="score-grade" id="scoreGrade"></div>
+        </div>
+      </div>
+
+      <div class="source-banner" id="sourceBanner"></div>
+
+      <div class="overview-grid">
+        <div class="info-block"><div class="info-label">Full name</div><div class="info-value" id="ovName">—</div></div>
+        <div class="info-block"><div class="info-label">Email</div><div class="info-value" id="ovEmail">—</div></div>
+        <div class="info-block"><div class="info-label">Phone</div><div class="info-value" id="ovPhone">—</div></div>
+        <div class="info-block"><div class="info-label">Location</div><div class="info-value" id="ovLocation">—</div></div>
+      </div>
+
+      <div class="summary-block" id="ovSummary" hidden>
+        <div class="info-label">Professional summary</div>
+        <p class="summary-text" id="ovSummaryText"></p>
+      </div>
+
+      <div class="card-inner" id="scoreDims"></div>
+
+      <!-- Next page CTA -->
+      <div class="next-row">
+        <button class="btn-next" data-page="skills">View Skills →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Skills ───────────────────────────────────────────────────────────── -->
+  <div class="full-page" id="rpage-skills" hidden>
+    <div class="full-page-inner">
+      <h1 class="page-h1">Skills</h1>
+      <div class="skill-categories" id="skillCategories"></div>
+      <div class="skills-wrap" id="skillsWrap"></div>
+      <div class="next-row">
+        <button class="btn-prev" data-page="overview">← Overview</button>
+        <button class="btn-next" data-page="experience">Experience →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Experience ───────────────────────────────────────────────────────── -->
+  <div class="full-page" id="rpage-experience" hidden>
+    <div class="full-page-inner">
+      <h1 class="page-h1">Experience</h1>
+      <div class="timeline" id="expTimeline"></div>
+      <div class="next-row">
+        <button class="btn-prev" data-page="skills">← Skills</button>
+        <button class="btn-next" data-page="education">Education →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Education ────────────────────────────────────────────────────────── -->
+  <div class="full-page" id="rpage-education" hidden>
+    <div class="full-page-inner">
+      <h1 class="page-h1">Education</h1>
+      <div class="edu-list" id="eduList"></div>
+      <div class="next-row">
+        <button class="btn-prev" data-page="experience">← Experience</button>
+        <button class="btn-next" data-page="ats">ATS Check →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── ATS Check ────────────────────────────────────────────────────────── -->
+  <div class="full-page" id="rpage-ats" hidden>
+    <div class="full-page-inner">
+      <h1 class="page-h1">ATS Check</h1>
+      <p class="card-sub" style="margin-bottom:24px">See how well your resume performs against Applicant Tracking Systems and get specific, actionable suggestions.</p>
+
+      <!-- ATS score banner -->
+      <div class="ats-score-banner" id="atsBanner">
+        <div class="ats-score-left">
+          <div class="ats-score-ring-wrap">
+            <svg viewBox="0 0 100 100" width="90" height="90">
+              <circle class="ring-bg"    cx="50" cy="50" r="40"/>
+              <circle class="ats-ring"   cx="50" cy="50" r="40" id="atsRingFill"/>
+            </svg>
+            <div class="ats-ring-center">
+              <span class="ats-pct" id="atsPct">—</span>
+            </div>
+          </div>
+          <div>
+            <div class="ats-overall" id="atsOverall">—</div>
+            <div class="ats-stats" id="atsStats"></div>
+          </div>
+        </div>
+        <div class="ats-top-tips" id="atsTopTips"></div>
+      </div>
+
+      <!-- Category breakdown -->
+      <div id="atsCategoryList"></div>
+
+      <div class="next-row">
+        <button class="btn-prev" data-page="education">← Education</button>
+        <button class="btn-next" data-page="compare">Compare →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Compare ──────────────────────────────────────────────────────────── -->
+  <div class="full-page" id="rpage-compare" hidden>
+    <div class="full-page-inner">
+      <h1 class="page-h1">Compare resumes</h1>
+      <p class="card-sub" style="margin-bottom:28px">Upload a second resume to see a side-by-side breakdown.</p>
+
+      <div class="compare-upload-row">
+        <div class="compare-slot">
+          <div class="compare-slot-label">Resume A (current)</div>
+          <div class="compare-slot-name" id="compareNameA">—</div>
+        </div>
+        <div class="compare-vs">vs</div>
+        <div class="compare-slot">
+          <div class="compare-slot-label">Resume B</div>
+          <label class="btn-outline" for="fileInputB">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:4px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            <span id="compareBLabel">Upload Resume B</span>
+          </label>
+          <input type="file" id="fileInputB" accept=".pdf,.docx,.txt" hidden />
+        </div>
+      </div>
+
+      <div class="compare-loading" id="compareLoading" hidden>
+        <svg class="spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+        Extracting resume B…
+      </div>
+      <div class="compare-grid" id="compareGrid" hidden></div>
+
+      <div class="next-row" style="margin-top:32px">
+        <button class="btn-prev" data-page="ats">← ATS Check</button>
+        <button class="btn-ghost-sm" id="btnDownload">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download JSON
+        </button>
+        <button class="btn-ghost-sm" id="btnPrint">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+          Print / Export
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /pageResults -->
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
